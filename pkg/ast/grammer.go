@@ -4,10 +4,9 @@ import (
 	"github.com/alecthomas/participle/v2"
 )
 
-type Map struct {
+type Container struct {
 	ID     string   `@Ident`
 	Fields []*Field `@@+`
-	Enums  []*Enum  `(DOLLAR_SPLIT @@*)?`
 }
 
 type Field struct {
@@ -65,19 +64,8 @@ func (s *Scalar) IsInteger() bool {
 	return false
 }
 
-type Enum struct {
-	EnumType string         `LeftBrace @Ident RightBrace`
-	EnumElms []*EnumElement `@@*`
-}
-
-type EnumElement struct {
-	EnumLiteral string `@EnumLiteral`
-	EnumValue   int    `@Number`
-	ID          string `@Ident`
-}
-
 type Struct struct {
-	Fields []*StructElement `LeftBrace @@* RightBrace`
+	Fields []*StructElement `LeftBracket @@* RightBracket`
 }
 
 type StructElement struct {
@@ -90,23 +78,7 @@ type StructElement struct {
 func parseStructList(input string) (*Struct, error) {
 	parser = participle.MustBuild(&Struct{}, parserOption...)
 	symbol := &Struct{}
-	err := parser.ParseString("enum parse test", input, symbol)
-	return symbol, err
-}
-
-// for grammar test
-func parseEnum(input string) (*Enum, error) {
-	parser = participle.MustBuild(&Enum{}, parserOption...)
-	symbol := &Enum{}
-	err := parser.ParseString("enum parse test", input, symbol)
-	return symbol, err
-}
-
-// for grammar test
-func parseEnumField(input string) (*EnumElement, error) {
-	parser = participle.MustBuild(&EnumElement{}, parserOption...)
-	symbol := &EnumElement{}
-	err := parser.ParseString("enum parse test", input, symbol)
+	err := parser.ParseString("struct parse test", input, symbol)
 	return symbol, err
 }
 

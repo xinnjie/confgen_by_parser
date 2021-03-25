@@ -7,8 +7,8 @@ import (
 var (
 	tokens = stateful.MustSimple([]stateful.Rule{
 		// 关键字
-		{"LeftBrace", `{`, nil},
-		{"RightBrace", `}`, nil},
+		{"LeftBracket", `\[`, nil},
+		{"RightBracket", `\]`, nil},
 		{"Vector", `vector`, nil},
 		{"DOLLAR_SPLIT", `\$`, nil},
 		{"Uint32", "uint32", nil},
@@ -23,7 +23,6 @@ var (
 		{"String", `"[^"]*"`, nil},
 		{"Number", `[-+]?(\d*\.)?\d+`, nil},
 		{"Ident", `[a-zA-Z_]\w*`, nil},
-		{"EnumLiteral", `\[[^\]]*\][^\s]*`, nil}, // 形如 [实例类型]实例类型1
 		{"Whitespace", `[ \t\n\r]+`, nil},
 	})
 )

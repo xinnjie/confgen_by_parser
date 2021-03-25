@@ -9,5 +9,5 @@ var (
 		participle.Elide("Whitespace"),
 	}
 
-	parser = participle.MustBuild(&Map{}, parserOption...)
+	parser = participle.MustBuild(&Container{}, parserOption...)
 )

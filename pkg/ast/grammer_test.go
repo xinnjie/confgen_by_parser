@@ -58,106 +58,6 @@ func Test_parseScalar(t *testing.T) {
 	}
 }
 
-func Test_parseEnumField(t *testing.T) {
-	type args struct {
-		input string
-	}
-	tests := []struct {
-		name    string
-		args    args
-		want    *EnumElement
-		wantErr bool
-	}{
-		{
-			name: "valid enum",
-			args: args{input: "[实例类型]实例类型1 1 E_BAR_1 \n"},
-			want: &EnumElement{
-				EnumLiteral: "[实例类型]实例类型1",
-				EnumValue:   1,
-				ID:          "E_BAR_1",
-			},
-			wantErr: false,
-		},
-		{
-			name:    "invalid enum",
-			args:    args{input: "实例类型实例类型1 1 E_BAR_1 \n"},
-			want:    &EnumElement{},
-			wantErr: true,
-		},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			got, err := parseEnumField(tt.args.input)
-			if (err != nil) != tt.wantErr {
-				t.Errorf("parseEnumField() error = %v, wantErr %v", err, tt.wantErr)
-				return
-			}
-			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("parseEnumField() got = %v, want %v", got, tt.want)
-			}
-		})
-	}
-}
-
-func Test_parseEnum(t *testing.T) {
-	type args struct {
-		input string
-	}
-	tests := []struct {
-		name    string
-		args    args
-		want    *Enum
-		wantErr bool
-	}{
-		{
-			name: "enum without field",
-			args: args{
-				input: "{BarEnum} \n",
-			},
-			want: &Enum{
-				EnumType: "BarEnum",
-			},
-			wantErr: false,
-		},
-		{
-			name: "enum with field",
-			args: args{
-				input: "{BarEnum} \n" +
-					"[实例类型]实例类型1 1 E_BAR_1 \n" +
-					"[实例类型]实例类型2 2 E_BAR_2 \n",
-			},
-			want: &Enum{
-				EnumType: "BarEnum",
-				EnumElms: []*EnumElement{
-					{
-						EnumLiteral: "[实例类型]实例类型1",
-						EnumValue:   1,
-						ID:          "E_BAR_1",
-					},
-					{
-						EnumLiteral: "[实例类型]实例类型2",
-						EnumValue:   2,
-						ID:          "E_BAR_2",
-					},
-				},
-			},
-			wantErr: false,
-		},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			got, err := parseEnum(tt.args.input)
-			if (err != nil) != tt.wantErr {
-				t.Errorf("parseEnum() error = %v, wantErr %v", err, tt.wantErr)
-				return
-			}
-			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("parseEnum() got = %v, want %v", got, tt.want)
-			}
-		})
-	}
-}
-
 func Test_parseStructList(t *testing.T) {
 	type args struct {
 		input string
@@ -171,8 +71,8 @@ func Test_parseStructList(t *testing.T) {
 		{
 			name: "struct",
 			args: args{
-				input: "{bar_1  uint32 \"\" \n" +
-					"bar_2  uint32 \"\" }",
+				input: "[bar_1  uint32 \"\" \n" +
+					"bar_2  uint32 \"\" ]",
 			},
 			want: &Struct{Fields: []*StructElement{
 				{
@@ -226,8 +126,8 @@ func Test_parseField(t *testing.T) {
 		{
 			name: "vector<int64> field",
 			args: args{"foo vector int64 \"这是vector<int64>字段\" \n" +
-				"{int64 \"\"}\n" +
-				"{int64 \"\"}\n"},
+				"[int64 \"\"]\n" +
+				"[int64 \"\"]\n"},
 			want: &Field{
 				ScalarVector: &ScalarVectorField{
 					Name:   "foo",
@@ -259,10 +159,10 @@ func Test_parseField(t *testing.T) {
 		{
 			name: "vector<struct> field",
 			args: args{"foo vector FooStruct \"这是vector<struct>字段\" \n" +
-				"{bar_1  uint32 \"\" \n" +
-				"bar_2  uint32 \"\" }\n" +
-				"{bar_1  uint32 \"\" \n" +
-				"bar_2  uint32 \"\" }\n"},
+				"[bar_1  uint32 \"\" \n" +
+				"bar_2  uint32 \"\" ]\n" +
+				"[bar_1  uint32 \"\" \n" +
+				"bar_2  uint32 \"\" ]\n"},
 			want: &Field{
 				StructVector: &StructVectorField{
 					Name:       "foo",
