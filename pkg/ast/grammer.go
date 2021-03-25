@@ -5,8 +5,9 @@ import (
 )
 
 type Container struct {
-	ID     string   `@Ident`
 	Fields []*Field `@@+`
+
+	Name string
 }
 
 type Field struct {

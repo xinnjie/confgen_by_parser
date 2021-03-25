@@ -4,12 +4,14 @@ import (
 	"bytes"
 	"fmt"
 	"github.com/stretchr/testify/assert"
+	"github.com/tealeg/xlsx"
 	"testing"
 )
 
 func TestCsvExport_ExportCsv(t *testing.T) {
-	exporter, err := NewExporter("../../testdata/basic-field.xlsx")
+	xlsxFile, err := xlsx.OpenFile("../../testdata/basic-field.xlsx")
 	assert.NoError(t, err)
+	exporter := NewExporter(xlsxFile)
 	buf := &bytes.Buffer{}
 	assert.NoError(t, exporter.Export(buf, "Basic"))
 	fmt.Println(buf.String())

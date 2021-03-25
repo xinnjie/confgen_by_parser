@@ -9,23 +9,17 @@ import (
 
 // 摊平 Excel 表格
 type Exporter struct {
-	xlsxName string
 	xlsxFile *xlsx.File
 }
 
-func NewExporter(xlsxName string) (*Exporter, error) {
-	xlsxFile, err := xlsx.OpenFile(xlsxName)
-	if err != nil {
-		log.Print("open xlsx filed", err)
-		return nil, err
-	}
-	return &Exporter{xlsxName: xlsxName, xlsxFile: xlsxFile}, nil
+func NewExporter(file *xlsx.File) *Exporter {
+	return &Exporter{xlsxFile: file}
 }
 
 func (c *Exporter) Export(writer io.Writer, sheetName string) error {
 	sheet, ok := c.xlsxFile.Sheet[sheetName]
 	if !ok {
-		return fmt.Errorf("no sheet %s in %s", sheetName, c.xlsxName)
+		return fmt.Errorf("no sheet %s", sheetName)
 	}
 	for i := 0; i < sheet.MaxCol; i++ {
 		if sheet.Cell(0, i).Value == "" {
