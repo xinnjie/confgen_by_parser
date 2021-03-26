@@ -27,36 +27,40 @@ func TestGenAst(t *testing.T) {
 			&Container{
 				Fields: []*Field{
 					{
-						Scalar: &ScalarField{
-							Name:   "foo_key",
-							Scalar: Scalar{IsUINT32: true},
-							Desc:   `"这是scalar字段"`,
+						Basic: &BasicField{
+							Scalar: &ScalarField{
+								Name:   "foo_key",
+								Scalar: Scalar{IsUINT32: true},
+								Desc:   `'这是scalar字段'`,
+							},
 						},
 					},
 					{
-						Scalar: &ScalarField{
-							Name:   "foo_uint32",
-							Scalar: Scalar{IsUINT32: true},
-							Desc:   `""`,
+						Basic: &BasicField{
+							Scalar: &ScalarField{
+								Name:   "foo_uint32",
+								Scalar: Scalar{IsUINT32: true},
+								Desc:   `''`,
+							},
 						},
 					},
 					{
 						StructVector: &StructVectorField{
 							Name:       "bar",
 							StructName: "BarStruct",
-							Desc:       `"这是vector<struct>字段"`,
+							Desc:       `'这是vector<struct>字段'`,
 							StructList: []*Struct{
 								{
 									Fields: []*StructElement{
 										{
 											Id:   "bar_1",
 											Type: Scalar{IsUINT32: true},
-											Desc: `""`,
+											Desc: `''`,
 										},
 										{
 											Id:   "bar_2",
 											Type: Scalar{IsUINT32: true},
-											Desc: `""`,
+											Desc: `''`,
 										},
 									},
 								},

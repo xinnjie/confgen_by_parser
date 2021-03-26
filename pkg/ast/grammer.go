@@ -1,9 +1,5 @@
 package ast
 
-import (
-	"github.com/alecthomas/participle/v2"
-)
-
 type Container struct {
 	Fields []*Field `@@+`
 
@@ -11,15 +7,35 @@ type Container struct {
 }
 
 type Field struct {
-	Scalar       *ScalarField       `(@@`
+	Basic        *BasicField        `(@@`
 	ScalarVector *ScalarVectorField `|@@`
 	StructVector *StructVectorField `|@@)`
+}
+
+type BasicField struct {
+	Scalar *ScalarField `(@@`
+	Bool   *BoolField   `|@@`
+	String *StringFiled `|@@)`
 }
 
 type ScalarField struct {
 	Name   string `@Ident`
 	Scalar Scalar `@@`
 	Desc   string `@String`
+
+	Value string
+}
+
+type BoolField struct {
+	Name string `@Ident Bool`
+	Desc string `@String`
+
+	Value string
+}
+
+type StringFiled struct {
+	Name string `@Ident StringT`
+	Desc string `@String`
 
 	Value string
 }
@@ -75,28 +91,4 @@ type StructElement struct {
 	Id   string `@Ident?`
 	Type Scalar `@@`
 	Desc string `@String`
-}
-
-// for grammar test
-func parseStructList(input string) (*Struct, error) {
-	parser = participle.MustBuild(&Struct{}, parserOption...)
-	symbol := &Struct{}
-	err := parser.ParseString("struct parse test", input, symbol)
-	return symbol, err
-}
-
-// for grammar test
-func parseScalar(input string) (*Scalar, error) {
-	parser = participle.MustBuild(&Scalar{}, parserOption...)
-	symbol := &Scalar{}
-	err := parser.ParseString("scalar parse test", input, symbol)
-	return symbol, err
-}
-
-// for grammar test
-func parseField(input string) (*Field, error) {
-	parser = participle.MustBuild(&Field{}, parserOption...)
-	symbol := &Field{}
-	err := parser.ParseString("filed parse test", input, symbol)
-	return symbol, err
 }

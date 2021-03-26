@@ -1,10 +1,35 @@
 package ast
 
 import (
+	"github.com/alecthomas/participle/v2"
 	"github.com/stretchr/testify/assert"
 	"reflect"
 	"testing"
 )
+
+// for grammar test
+func parseStructList(input string) (*Struct, error) {
+	parser = participle.MustBuild(&Struct{}, parserOption...)
+	symbol := &Struct{}
+	err := parser.ParseString("struct parse test", input, symbol)
+	return symbol, err
+}
+
+// for grammar test
+func parseScalar(input string) (*Scalar, error) {
+	parser = participle.MustBuild(&Scalar{}, parserOption...)
+	symbol := &Scalar{}
+	err := parser.ParseString("scalar parse test", input, symbol)
+	return symbol, err
+}
+
+// for grammar test
+func parseField(input string) (*Field, error) {
+	parser = participle.MustBuild(&Field{}, parserOption...)
+	symbol := &Field{}
+	err := parser.ParseString("filed parse test", input, symbol)
+	return symbol, err
+}
 
 func Test_parseScalar(t *testing.T) {
 	type args struct {
@@ -78,12 +103,12 @@ func Test_parseStructList(t *testing.T) {
 				{
 					Id:   "bar_1",
 					Type: Scalar{IsUINT32: true},
-					Desc: `""`,
+					Desc: `''`,
 				},
 				{
 					Id:   "bar_2",
 					Type: Scalar{IsUINT32: true},
-					Desc: `""`,
+					Desc: `''`,
 				},
 			}},
 			wantErr: false,
@@ -115,10 +140,12 @@ func Test_parseField(t *testing.T) {
 			name: "scalar field",
 			args: args{"foo_key  uint32 '这是scalar字段'"},
 			want: &Field{
-				Scalar: &ScalarField{
-					Name:   "foo_key",
-					Scalar: Scalar{IsUINT32: true},
-					Desc:   `"这是scalar字段"`,
+				Basic: &BasicField{
+					Scalar: &ScalarField{
+						Name:   "foo_key",
+						Scalar: Scalar{IsUINT32: true},
+						Desc:   `"这是scalar字段"`,
+					},
 				},
 			},
 			wantErr: false,
@@ -139,7 +166,7 @@ func Test_parseField(t *testing.T) {
 								{
 									Id:   "",
 									Type: Scalar{IsINT64: true},
-									Desc: `""`,
+									Desc: `''`,
 								},
 							},
 						},
@@ -148,7 +175,7 @@ func Test_parseField(t *testing.T) {
 								{
 									Id:   "",
 									Type: Scalar{IsINT64: true},
-									Desc: `""`,
+									Desc: `''`,
 								},
 							},
 						}},
@@ -174,12 +201,12 @@ func Test_parseField(t *testing.T) {
 								{
 									Id:   "bar_1",
 									Type: Scalar{IsUINT32: true},
-									Desc: `""`,
+									Desc: `''`,
 								},
 								{
 									Id:   "bar_2",
 									Type: Scalar{IsUINT32: true},
-									Desc: `""`,
+									Desc: `''`,
 								},
 							}},
 						{
@@ -187,12 +214,12 @@ func Test_parseField(t *testing.T) {
 								{
 									Id:   "bar_1",
 									Type: Scalar{IsUINT32: true},
-									Desc: `""`,
+									Desc: `''`,
 								},
 								{
 									Id:   "bar_2",
 									Type: Scalar{IsUINT32: true},
-									Desc: `""`,
+									Desc: `''`,
 								},
 							}},
 					},
