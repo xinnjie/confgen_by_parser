@@ -71,8 +71,8 @@ func Test_parseStructList(t *testing.T) {
 		{
 			name: "struct",
 			args: args{
-				input: "[bar_1  uint32 \"\" \n" +
-					"bar_2  uint32 \"\" ]",
+				input: "[bar_1  uint32 '' \n" +
+					"bar_2  uint32 '' ]",
 			},
 			want: &Struct{Fields: []*StructElement{
 				{
@@ -113,7 +113,7 @@ func Test_parseField(t *testing.T) {
 	}{
 		{
 			name: "scalar field",
-			args: args{"foo_key  uint32 \"这是scalar字段\""},
+			args: args{"foo_key  uint32 '这是scalar字段'"},
 			want: &Field{
 				Scalar: &ScalarField{
 					Name:   "foo_key",
@@ -125,9 +125,9 @@ func Test_parseField(t *testing.T) {
 		},
 		{
 			name: "vector<int64> field",
-			args: args{"foo vector int64 \"这是vector<int64>字段\" \n" +
-				"[int64 \"\"]\n" +
-				"[int64 \"\"]\n"},
+			args: args{"foo vector int64 '这是vector<int64>字段' \n" +
+				"[int64 '']\n" +
+				"[int64 '']\n"},
 			want: &Field{
 				ScalarVector: &ScalarVectorField{
 					Name:   "foo",
@@ -158,11 +158,11 @@ func Test_parseField(t *testing.T) {
 		},
 		{
 			name: "vector<struct> field",
-			args: args{"foo vector FooStruct \"这是vector<struct>字段\" \n" +
-				"[bar_1  uint32 \"\" \n" +
-				"bar_2  uint32 \"\" ]\n" +
-				"[bar_1  uint32 \"\" \n" +
-				"bar_2  uint32 \"\" ]\n"},
+			args: args{"foo vector FooStruct '这是vector<struct>字段' \n" +
+				"[bar_1  uint32 '' \n" +
+				"bar_2  uint32 '' ]\n" +
+				"[bar_1  uint32 '' \n" +
+				"bar_2  uint32 '' ]\n"},
 			want: &Field{
 				StructVector: &StructVectorField{
 					Name:       "foo",

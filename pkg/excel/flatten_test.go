@@ -15,5 +15,5 @@ func TestCsvExport_ExportCsv(t *testing.T) {
 	buf := &bytes.Buffer{}
 	assert.NoError(t, exporter.Export(buf, "Basic"))
 	fmt.Println(buf.String())
-	assert.EqualValues(t, "title  string \"标题\"\nseason  uint32 \"赛季编号\"\n", buf.String())
+	assert.EqualValues(t, "title  string '标题'\nseason  uint32 '赛季编号'\n", buf.String())
 }

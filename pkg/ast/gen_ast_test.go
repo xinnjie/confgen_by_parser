@@ -18,11 +18,11 @@ func TestGenAst(t *testing.T) {
 		{
 			"one Key map parser test ",
 			args{
-				defineString: "foo_key  uint32 \"这是scalar字段\" \n" +
-					"foo_uint32  uint32 \"\" \n" +
-					"bar vector BarStruct \"这是vector<struct>字段\" \n" +
-					"[bar_1  uint32 \"\" \n" +
-					"bar_2  uint32 \"\" ]\n",
+				defineString: "foo_key  uint32 '这是scalar字段' \n" +
+					"foo_uint32  uint32 '' \n" +
+					"bar vector BarStruct '这是vector<struct>字段' \n" +
+					"[bar_1  uint32 '' \n" +
+					"bar_2  uint32 '' ]\n",
 			},
 			&Container{
 				Fields: []*Field{

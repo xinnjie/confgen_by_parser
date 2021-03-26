@@ -20,7 +20,7 @@ var (
 		{"Float", "float", nil},
 		{"StringT", "string", nil},
 
-		{"String", `"[^"]*"`, nil},
+		{"String", `'[^']*'`, nil},
 		{"Number", `[-+]?(\d*\.)?\d+`, nil},
 		{"Ident", `[a-zA-Z_]\w*`, nil},
 		{"Whitespace", `[ \t\n\r]+`, nil},

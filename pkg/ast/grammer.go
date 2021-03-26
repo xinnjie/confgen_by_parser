@@ -20,6 +20,8 @@ type ScalarField struct {
 	Name   string `@Ident`
 	Scalar Scalar `@@`
 	Desc   string `@String`
+
+	Value string
 }
 
 type StructVectorField struct {
