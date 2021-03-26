@@ -144,7 +144,7 @@ func Test_parseField(t *testing.T) {
 					Scalar: &ScalarField{
 						Name:   "foo_key",
 						Scalar: Scalar{IsUINT32: true},
-						Desc:   `"这是scalar字段"`,
+						Desc:   `'这是scalar字段'`,
 					},
 				},
 			},
@@ -159,7 +159,7 @@ func Test_parseField(t *testing.T) {
 				ScalarVector: &ScalarVectorField{
 					Name:   "foo",
 					Scalar: Scalar{IsINT64: true},
-					Desc:   `"这是vector<int64>字段"`,
+					Desc:   `'这是vector<int64>字段'`,
 					StructList: []*Struct{
 						{
 							Fields: []*StructElement{
@@ -194,7 +194,7 @@ func Test_parseField(t *testing.T) {
 				StructVector: &StructVectorField{
 					Name:       "foo",
 					StructName: "FooStruct",
-					Desc:       `"这是vector<struct>字段"`,
+					Desc:       `'这是vector<struct>字段'`,
 					StructList: []*Struct{
 						{
 							Fields: []*StructElement{

@@ -3,7 +3,7 @@ package excel
 import (
 	"encoding/csv"
 	"fmt"
-	"github.com/tealeg/xlsx"
+	"github.com/tealeg/xlsx/v3"
 	"io"
 	"log"
 )
@@ -26,15 +26,36 @@ func (c *Flattener) Flatten(writer io.Writer, sheetName string) error {
 		return fmt.Errorf("no sheet %s", sheetName)
 	}
 	for i := 0; i < sheet.MaxCol; i++ {
-		if sheet.Cell(0, i).Value == "" {
+		cellRow0, err := sheet.Cell(0, i)
+		if err != nil {
+			// not possible
+			panic(err)
+		}
+		cellRow1, err := sheet.Cell(1, i)
+		if err != nil {
+			// not possible
+			panic(err)
+		}
+		cellRow2, err := sheet.Cell(2, i)
+		if err != nil {
+			// not possible
+			panic(err)
+		}
+		cellRow3, err := sheet.Cell(3, i)
+		if err != nil {
+			// not possible
+			panic(err)
+		}
+		// 跳过空列
+		if cellRow0.Value == "" {
 			log.Printf("col %d empty, skip it", i)
 			continue
 		}
 		if err := csvWriter.Write([]string{
-			sheet.Cell(0, i).Value,
-			sheet.Cell(1, i).Value,
-			sheet.Cell(2, i).Value,
-			fmt.Sprintf(`'%s'`, sheet.Cell(3, i).Value)},
+			cellRow0.Value,
+			cellRow1.Value,
+			cellRow2.Value,
+			fmt.Sprintf(`'%s'`, cellRow3.Value)},
 		); err != nil {
 			return err
 		}

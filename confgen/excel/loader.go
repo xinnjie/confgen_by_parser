@@ -2,7 +2,7 @@ package excel
 
 import (
 	"bytes"
-	"github.com/tealeg/xlsx"
+	"github.com/tealeg/xlsx/v3"
 	"github.com/xinnjie/confgen_by_parser/confgen/ast"
 	"log"
 )

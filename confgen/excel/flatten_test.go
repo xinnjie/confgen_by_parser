@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"fmt"
 	"github.com/stretchr/testify/assert"
-	"github.com/tealeg/xlsx"
+	"github.com/tealeg/xlsx/v3"
 	"testing"
 )
 
