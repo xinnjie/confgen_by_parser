@@ -3,13 +3,13 @@ package excel
 import (
 	"bytes"
 	"github.com/tealeg/xlsx"
-	"github.com/xinnjie/confgen_by_parser/pkg/ast"
+	"github.com/xinnjie/confgen_by_parser/confgen/ast"
 	"log"
 )
 
 type Loader struct {
-	xlsxName string
-	exporter *Exporter
+	xlsxName  string
+	flattener *Flattener
 }
 
 func NewLoader(xlsxName string) (*Loader, error) {
@@ -18,13 +18,13 @@ func NewLoader(xlsxName string) (*Loader, error) {
 		log.Print("open xlsx filed", err)
 		return nil, err
 	}
-	exporter := NewExporter(xlsxFile)
-	return &Loader{xlsxName: xlsxName, exporter: exporter}, nil
+	exporter := NewFlattener(xlsxFile)
+	return &Loader{xlsxName: xlsxName, flattener: exporter}, nil
 }
 
 func (l *Loader) Load(sheetName string) error {
 	buf := &bytes.Buffer{}
-	if err := l.exporter.Export(buf, sheetName); err != nil {
+	if err := l.flattener.Flatten(buf, sheetName); err != nil {
 		return err
 	}
 	c, err := ast.GenAst(buf, l.xlsxName)

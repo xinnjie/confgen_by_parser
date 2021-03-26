@@ -9,15 +9,15 @@ import (
 )
 
 // 将 Excel 表拍平！
-type Exporter struct {
+type Flattener struct {
 	xlsxFile *xlsx.File
 }
 
-func NewExporter(file *xlsx.File) *Exporter {
-	return &Exporter{xlsxFile: file}
+func NewFlattener(file *xlsx.File) *Flattener {
+	return &Flattener{xlsxFile: file}
 }
 
-func (c *Exporter) Export(writer io.Writer, sheetName string) error {
+func (c *Flattener) Flatten(writer io.Writer, sheetName string) error {
 	csvWriter := csv.NewWriter(writer)
 	csvWriter.Comma = ' '
 	defer csvWriter.Flush()
