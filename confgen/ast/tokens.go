@@ -10,7 +10,6 @@ var (
 		{"LeftBracket", `\[`, nil},
 		{"RightBracket", `\]`, nil},
 		{"Vector", `vector`, nil},
-		{"DOLLAR_SPLIT", `\$`, nil},
 		{"Uint32", "uint32", nil},
 		{"Int32", "int32", nil},
 		{"Uint64", "uint64", nil},

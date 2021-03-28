@@ -10,8 +10,11 @@ func Restore(w io.Writer, proto *descriptorpb.FileDescriptorProto) {
 	fmt.Fprintf(w, "syntax = \"%s\";\n\n"+
 		"package %s;\n\n", proto.GetSyntax(), proto.GetPackage())
 
-	for _, message := range proto.MessageType {
+	for i, message := range proto.MessageType {
 		RestoreFromMessage(w, message)
+		if i != len(proto.MessageType)-1 {
+			fmt.Fprintf(w, "\n")
+		}
 	}
 }
 
@@ -20,7 +23,7 @@ func RestoreFromMessage(w io.Writer, msg *descriptorpb.DescriptorProto) {
 	for _, field := range msg.Field {
 		RestoreFromField(w, field)
 	}
-	fmt.Fprintf(w, "}")
+	fmt.Fprintf(w, "}\n")
 }
 
 func RestoreFromField(w io.Writer, field *descriptorpb.FieldDescriptorProto) {

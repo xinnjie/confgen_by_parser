@@ -1,4 +1,4 @@
-package excel
+package load
 
 import (
 	"encoding/csv"
@@ -6,6 +6,7 @@ import (
 	"github.com/tealeg/xlsx/v3"
 	"io"
 	"log"
+	"strings"
 )
 
 // 将 Excel 表拍平！
@@ -51,11 +52,20 @@ func (c *Flattener) Flatten(writer io.Writer, sheetName string) error {
 			log.Printf("col %d empty, skip it", i)
 			continue
 		}
+
+		cellRow3.Value = fmt.Sprintf(`'%s'`, cellRow3.Value)
+		// 结构体变换结构
+		structEnd := len(cellRow0.Value) > 2 && strings.HasSuffix(cellRow0.Value, "]")
+		if structEnd {
+			cellRow0.Value = cellRow0.Value[:len(cellRow0.Value)-1]
+			cellRow3.Value = cellRow3.Value + "]"
+		}
+
 		if err := csvWriter.Write([]string{
 			cellRow0.Value,
 			cellRow1.Value,
 			cellRow2.Value,
-			fmt.Sprintf(`'%s'`, cellRow3.Value)},
+			cellRow3.Value},
 		); err != nil {
 			return err
 		}

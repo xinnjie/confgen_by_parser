@@ -8,47 +8,31 @@ type Container struct {
 
 type Field struct {
 	Basic        *BasicField        `parser:"(@@"`
-	ScalarVector *ScalarVectorField `parser:"|@@"`
+	BasicVector  *BasicVectorField  `parser:"|@@"`
 	StructVector *StructVectorField `parser:"|@@)"`
 }
 
 type BasicField struct {
-	Scalar *ScalarField `parser:"(@@"`
-	Bool   *BoolField   `parser:"|@@"`
-	String *StringFiled `parser:"|@@)"`
-}
-
-type ScalarField struct {
-	Name   string `parser:"@Ident"`
-	Scalar Scalar `parser:"@@"`
-	Desc   string `parser:"@String"`
-}
-
-type BoolField struct {
-	Name string `parser:"@Ident Bool"`
-	Desc string `parser:"@String"`
-}
-
-type StringFiled struct {
-	Name string `parser:"@Ident StringT"`
+	Name string `parser:"@Ident"`
+	Type Basic  `parser:"@@"`
 	Desc string `parser:"@String"`
 }
 
 type StructVectorField struct {
-	Name       string    `parser:"@Ident"`
-	StructName string    `parser:"Vector @Ident"`
-	Desc       string    `parser:"@String"`
-	StructList []*Struct `parser:"@@*"`
+	Name       string            `parser:"@Ident"`
+	StructName string            `parser:"Vector @Ident"`
+	Desc       string            `parser:"@String"`
+	StructList []*StructInVector `parser:"@@*"`
 }
 
-type ScalarVectorField struct {
-	Name       string    `parser:"@Ident"`
-	Scalar     Scalar    `parser:"Vector @@"`
-	Desc       string    `parser:"@String"`
-	StructList []*Struct `parser:"@@*"`
+type BasicVectorField struct {
+	Name      string         `parser:"@Ident"`
+	Type      Basic          `parser:"Vector @@"`
+	Desc      string         `parser:"@String"`
+	BasicList *BasicInVector `parser:"@@*"`
 }
 
-type Scalar struct {
+type Basic struct {
 	IsEnum   bool `parser:"( @Enum"`
 	IsTime   bool `parser:"| @Time)?"`
 	IsUINT32 bool `parser:"( @Uint32"`
@@ -61,7 +45,7 @@ type Scalar struct {
 	IsFLOAT  bool `parser:"| @Float)"`
 }
 
-func (s *Scalar) Valid() bool {
+func (s *Basic) Valid() bool {
 	if s.IsEnum {
 		if !s.IsInteger() {
 			return false
@@ -70,19 +54,22 @@ func (s *Scalar) Valid() bool {
 	return true
 }
 
-func (s *Scalar) IsInteger() bool {
+func (s *Basic) IsInteger() bool {
 	if s.IsINT32 || s.IsUINT32 || s.IsINT64 || s.IsUINT64 {
 		return true
 	}
 	return false
 }
 
-type Struct struct {
-	Fields []*StructElement `parser:"LeftBracket @@* RightBracket"`
+type BasicInVector struct {
+	Fields []*BasicElement `parser:"@@+"` // TODO @@* 会死循环, parser库可以改进
 }
 
-type StructElement struct {
-	Id   string `parser:"@Ident?"`
-	Type Scalar `parser:"@@"`
+type BasicElement struct {
+	Type Basic  `parser:"LeftBracket RightBracket @@"`
 	Desc string `parser:"@String"`
+}
+
+type StructInVector struct {
+	Fields []*BasicField `parser:"LeftBracket @@* RightBracket"`
 }

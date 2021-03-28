@@ -82,5 +82,16 @@ func TestRestore(t *testing.T) {
 
 	w := &bytes.Buffer{}
 	Restore(w, proto)
-	assert.EqualValues(t, "syntax = \"proto3\";\n\npackage example.foo;\n\nmessage Foo {\n  uint32 foo_uint32 = 1;\n  int32 foo_int32 = 2;\n  uint64 foo_uint64 = 3;\n  int64 foo_int64 = 4;\n  repeated string foo_list_string = 5;\n}", w.String())
+	assert.EqualValues(t, `syntax = "proto3";
+
+package example.foo;
+
+message Foo {
+  uint32 foo_uint32 = 1;
+  int32 foo_int32 = 2;
+  uint64 foo_uint64 = 3;
+  int64 foo_int64 = 4;
+  repeated string foo_list_string = 5;
+}
+`, w.String())
 }

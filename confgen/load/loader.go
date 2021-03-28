@@ -1,7 +1,9 @@
-package excel
+package load
 
 import (
 	"bytes"
+	"github.com/xinnjie/confgen_by_parser/confgen/dump/proto"
+	"io"
 	"log"
 
 	"github.com/tealeg/xlsx/v3"
@@ -11,6 +13,7 @@ import (
 type Loader struct {
 	xlsxName  string
 	flattener *Flattener
+	ast       *ast.Container
 }
 
 func NewLoader(xlsxName string) (*Loader, error) {
@@ -33,5 +36,16 @@ func (l *Loader) Load(sheetName string) error {
 		return err
 	}
 	c.Name = sheetName
+	l.ast = c
+	return nil
+}
+
+func (l *Loader) OutputProto(w io.Writer, protoPackageName string) error {
+	dumper := proto.NewDumper(protoPackageName)
+	fileProtoDesc, err := dumper.Dump(l.ast)
+	if err != nil {
+		return err
+	}
+	proto.Restore(w, fileProtoDesc)
 	return nil
 }
