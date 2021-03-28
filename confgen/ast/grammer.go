@@ -1,70 +1,64 @@
 package ast
 
 type Container struct {
-	Fields []*Field `@@+`
+	Fields []*Field `parser:"@@+"`
 
 	Name string
 }
 
 type Field struct {
-	Basic        *BasicField        `(@@`
-	ScalarVector *ScalarVectorField `|@@`
-	StructVector *StructVectorField `|@@)`
+	Basic        *BasicField        `parser:"(@@"`
+	ScalarVector *ScalarVectorField `parser:"|@@"`
+	StructVector *StructVectorField `parser:"|@@)"`
 }
 
 type BasicField struct {
-	Scalar *ScalarField `(@@`
-	Bool   *BoolField   `|@@`
-	String *StringFiled `|@@)`
+	Scalar *ScalarField `parser:"(@@"`
+	Bool   *BoolField   `parser:"|@@"`
+	String *StringFiled `parser:"|@@)"`
 }
 
 type ScalarField struct {
-	Name   string `@Ident`
-	Scalar Scalar `@@`
-	Desc   string `@String`
-
-	Value string
+	Name   string `parser:"@Ident"`
+	Scalar Scalar `parser:"@@"`
+	Desc   string `parser:"@String"`
 }
 
 type BoolField struct {
-	Name string `@Ident Bool`
-	Desc string `@String`
-
-	Value string
+	Name string `parser:"@Ident Bool"`
+	Desc string `parser:"@String"`
 }
 
 type StringFiled struct {
-	Name string `@Ident StringT`
-	Desc string `@String`
-
-	Value string
+	Name string `parser:"@Ident StringT"`
+	Desc string `parser:"@String"`
 }
 
 type StructVectorField struct {
-	Name       string    `@Ident`
-	StructName string    `Vector @Ident`
-	Desc       string    `@String`
-	StructList []*Struct `@@*`
+	Name       string    `parser:"@Ident"`
+	StructName string    `parser:"Vector @Ident"`
+	Desc       string    `parser:"@String"`
+	StructList []*Struct `parser:"@@*"`
 }
 
 type ScalarVectorField struct {
-	Name       string    `@Ident`
-	Scalar     Scalar    `Vector @@`
-	Desc       string    `@String`
-	StructList []*Struct `@@*`
+	Name       string    `parser:"@Ident"`
+	Scalar     Scalar    `parser:"Vector @@"`
+	Desc       string    `parser:"@String"`
+	StructList []*Struct `parser:"@@*"`
 }
 
 type Scalar struct {
-	IsEnum     bool `(@"E"`
-	IsDateTime bool `| @"D")?` // 使用 string 存储
-	IsUINT32   bool `( @Uint32`
-	IsINT32    bool `| @Int32`
-	IsUINT64   bool `| @Uint64`
-	IsINT64    bool `| @Int64`
-	IsSTRING   bool `| @StringT`
-	IsBOOL     bool `| @Bool`
-	IsDOUBLE   bool `| @Double`
-	IsFLOAT    bool `| @Float)`
+	IsEnum   bool `parser:"( @Enum"`
+	IsTime   bool `parser:"| @Time)?"`
+	IsUINT32 bool `parser:"( @Uint32"`
+	IsINT32  bool `parser:"| @Int32"`
+	IsUINT64 bool `parser:"| @Uint64"`
+	IsINT64  bool `parser:"| @Int64"`
+	IsSTRING bool `parser:"| @StringT"`
+	IsBOOL   bool `parser:"| @Bool"`
+	IsDOUBLE bool `parser:"| @Double"`
+	IsFLOAT  bool `parser:"| @Float)"`
 }
 
 func (s *Scalar) Valid() bool {
@@ -84,11 +78,11 @@ func (s *Scalar) IsInteger() bool {
 }
 
 type Struct struct {
-	Fields []*StructElement `LeftBracket @@* RightBracket`
+	Fields []*StructElement `parser:"LeftBracket @@* RightBracket"`
 }
 
 type StructElement struct {
-	Id   string `@Ident?`
-	Type Scalar `@@`
-	Desc string `@String`
+	Id   string `parser:"@Ident?"`
+	Type Scalar `parser:"@@"`
+	Desc string `parser:"@String"`
 }

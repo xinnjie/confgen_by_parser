@@ -52,7 +52,7 @@ func Test_parseScalar(t *testing.T) {
 		{
 			name: "enum uint32",
 			args: args{
-				input: "E uint32",
+				input: "enum uint32",
 			},
 			want: &Scalar{
 				IsEnum:   true,

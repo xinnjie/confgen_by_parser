@@ -20,6 +20,9 @@ var (
 		{"Float", "float", nil},
 		{"StringT", "string", nil},
 
+		{"Time", "time", nil},
+		{"Enum", "enum", nil},
+
 		{"String", `'[^']*'`, nil},
 		{"Number", `[-+]?(\d*\.)?\d+`, nil},
 		{"Ident", `[a-zA-Z_]\w*`, nil},
